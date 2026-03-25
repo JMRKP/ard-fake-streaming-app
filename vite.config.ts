@@ -15,15 +15,15 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Interaktiver Prototyp mit Kamerazugriff',
-        short_name: 'Kamera Prototyp',
-        description: 'Interaktiver Prototyp mit Kamerazugriff',
+        name: 'ARD Fake Stram App',
+        short_name: 'ARD Fake Stram App',
+        description: 'Interaktiver Prototyp ARD Fake Stram App',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: '/ard-fake-streaming-app/',
+        start_url: '/ard-fake-streaming-app/',
         icons: [
           {
             src: 'pwa-192x192.png',
