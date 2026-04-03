@@ -56,10 +56,9 @@ export function ViewerMode() {
   ];
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="relative w-full max-w-sm aspect-[9/19.5] bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-zinc-800">
+    <div className="relative w-full h-dvh bg-zinc-900 overflow-hidden">
         {/* Header */}
-        <div className="absolute top-0 left-0 right-0 z-20 p-4 bg-gradient-to-b from-black/80 to-transparent">
+        <div className="absolute top-0 left-0 right-0 z-20 pt-[env(safe-area-inset-top)] px-4 pb-4 bg-gradient-to-b from-black/80 to-transparent">
           <button
             onClick={() => navigate("/")}
             className="text-white p-2 hover:bg-white/10 rounded-full transition-colors"
@@ -139,7 +138,7 @@ export function ViewerMode() {
             </div>
 
             {/* Chat Input Simulation */}
-            <div className="absolute bottom-4 left-4 right-4 z-20">
+            <div className="absolute bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 right-4 z-20">
               <div className="bg-black/60 backdrop-blur-sm rounded-full px-4 py-3 flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 text-white/60" />
                 <input
@@ -152,7 +151,6 @@ export function ViewerMode() {
             </div>
           </>
         )}
-      </div>
     </div>
   );
 }
