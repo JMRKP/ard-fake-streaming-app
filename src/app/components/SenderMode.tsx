@@ -63,10 +63,7 @@ export function SenderMode() {
         videoRef.current.srcObject = stream;
       }
     } catch (err) {
-      const message =
-        err instanceof DOMException ? err.message : "Unbekannter Fehler";
       console.error("Kamera-Fehler:", err);
-      alert(`Kamera-Fehler: ${message}`);
     }
   };
 
