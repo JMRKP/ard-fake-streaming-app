@@ -15,7 +15,7 @@ No linting or test commands are configured.
 
 ## Architecture
 
-**React + Vite + TypeScript PWA** deployed to GitHub Pages at `https://jmrkp.github.io/ard-fake-streaming-app/`.
+**React + Vite + TypeScript PWA** deployed to GitHub Pages at `https://jmrkp.github.io/ard-fake-streaming-app/`. The app runs in fullscreen mode and should feel as native as possible - without any OS details (iOS, Android).
 
 The app is a fake ARD (German broadcaster) live-streaming prototype with three routes (defined in `src/app/routes.ts`):
 - `/` → `Home.tsx` — landing/mode selection

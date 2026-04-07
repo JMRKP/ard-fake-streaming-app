@@ -132,6 +132,22 @@
     @apply bg-background text-foreground;
   }
 
+  @keyframes glitch {
+    0%, 100% { clip-path: none; transform: none; }
+    5% { clip-path: inset(20% 0 60% 0); transform: translateX(-3px); }
+    10% { clip-path: inset(50% 0 20% 0); transform: translateX(3px); }
+    15% { clip-path: none; transform: none; }
+    40% { clip-path: inset(70% 0 5% 0); transform: translateX(2px); }
+    45% { clip-path: none; transform: none; }
+    80% { clip-path: inset(10% 0 70% 0); transform: translateX(-2px); }
+    85% { clip-path: none; transform: none; }
+  }
+
+  .glitch-bar {
+    animation: glitch 1.5s infinite steps(1);
+    box-shadow: -2px 0 #0ff, 2px 0 #f00;
+  }
+
   /**
   * Default typography styles for HTML elements (h1-h4, p, label, button, input).
   * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.

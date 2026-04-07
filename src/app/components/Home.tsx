@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
 import { Video, Eye, Camera, CameraOff } from "lucide-react";
 
 type CameraPermission = "unknown" | "granted" | "prompt" | "denied";
 
 export function Home() {
+  const navigate = useNavigate();
   const [cameraPermission, setCameraPermission] = useState<CameraPermission>("unknown");
 
   useEffect(() => {
@@ -91,19 +92,21 @@ export function Home() {
         </p>
 
         <div className="space-y-4">
-          <Link to="/sender">
-            <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-opacity">
-              <Video className="w-6 h-6" />
-              Sender (Streamer)
-            </button>
-          </Link>
+          <button
+            onClick={() => navigate("/sender")}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+          >
+            <Video className="w-6 h-6" />
+            Sender (Streamer)
+          </button>
 
-          <Link to="/viewer">
-            <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-opacity">
-              <Eye className="w-6 h-6" />
-              Viewer (Zuschauer)
-            </button>
-          </Link>
+          <button
+            onClick={() => navigate("/viewer")}
+            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+          >
+            <Eye className="w-6 h-6" />
+            Viewer (Zuschauer)
+          </button>
         </div>
       </div>
     </div>

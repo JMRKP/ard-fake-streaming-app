@@ -1,5 +1,5 @@
 /** Initial countdown duration before the stream starts (seconds) */
-export const INITIAL_COUNTDOWN = 10;
+export const INITIAL_COUNTDOWN = 2;
 
 /** Maximum stream duration (seconds) — 3 minutes */
 export const STREAM_DURATION_SECONDS = 180;

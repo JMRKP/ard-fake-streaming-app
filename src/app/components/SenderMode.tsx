@@ -23,6 +23,31 @@ export function SenderMode() {
     "user",
   );
 
+  // Preload animated PNGs so they're decoded before the live phase
+  useEffect(() => {
+    const srcs = [
+      `${import.meta.env.BASE_URL}animated/Ikosaeder-Animation.png`,
+      `${import.meta.env.BASE_URL}animated/Nagrasyster_encoded_frame.png`,
+    ];
+    srcs.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+
+    // Preload overlay videos so they start instantly in live phase
+    const videoSrcs = [
+      `${import.meta.env.BASE_URL}animated/movie-hevc.mov`,
+      `${import.meta.env.BASE_URL}animated/movie-webm.webm`,
+    ];
+    videoSrcs.forEach((src) => {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "video";
+      link.href = src;
+      document.head.appendChild(link);
+    });
+  }, []);
+
   const { countdown, reset: resetCountdown } = useCountdownTimer({
     active: phase === "countdown",
     isPaused,
