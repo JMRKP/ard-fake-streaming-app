@@ -93,7 +93,7 @@ export function LiveScreen({
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.01 0.05"
-            numOctaves={1}
+            numOctaves={2}
             result="noise"
           >
             <animate
@@ -106,9 +106,9 @@ export function LiveScreen({
           <feDisplacementMap
             in="SourceGraphic"
             in2="noise"
-            scale={Math.min(2 + Math.floor(liveTime / 10) * 4, 30)}
+            scale={Math.min(4 + Math.floor(liveTime / 5) * 4, 30)}
             xChannelSelector="R"
-            yChannelSelector="G"
+            yChannelSelector="A"
           />
         </filter>
       </svg>
