@@ -143,10 +143,6 @@
     85% { clip-path: none; transform: none; }
   }
 
-  .glitch-bar {
-    animation: glitch 1.5s infinite steps(1);
-    box-shadow: -2px 0 #0ff, 2px 0 #f00;
-  }
 
   /**
   * Default typography styles for HTML elements (h1-h4, p, label, button, input).

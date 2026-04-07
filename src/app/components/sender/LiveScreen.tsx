@@ -89,6 +89,28 @@ export function LiveScreen({
             yChannelSelector="G"
           />
         </filter>
+        <filter id="peakometer-glitch">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.01 0.05"
+            numOctaves={1}
+            result="noise"
+          >
+            <animate
+              attributeName="baseFrequency"
+              dur="0.8s"
+              values="0.01 0.05;0.03 0.12;0.005 0.02;0.02 0.08;0.01 0.05"
+              repeatCount="indefinite"
+            />
+          </feTurbulence>
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale={Math.min(2 + Math.floor(liveTime / 10) * 4, 30)}
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
       </svg>
 
       <video
@@ -98,7 +120,7 @@ export function LiveScreen({
         muted
         aria-label="User camera feed"
         className="absolute inset-0 w-full h-full object-cover"
-        style={{ filter: "url(#camera-glitch)" }}
+        style={{ filter: liveTime >= 30 ? "url(#camera-glitch)" : "none" }}
       />
 
       <div
@@ -147,13 +169,13 @@ export function LiveScreen({
         </div>
       </div>
 
-      <div className="absolute top-48 left-4 right-4 z-20">
+      <div className="absolute top-48 left-4 right-4 z-20" style={{ filter: "url(#peakometer-glitch)" }}>
         <div className="bg-black/60 p-3 rounded-2xl">
           <div className="text-white text-xs mb-2">Peak-O-Meter</div>
           <div className="relative">
             <div className="h-3 bg-zinc-800 rounded-full overflow-hidden">
               <div
-                className="h-full transition-all duration-500 glitch-bar"
+                className="h-full transition-all duration-500"
                 style={{
                   width: `${successLevel}%`,
                   background: `linear-gradient(to right, #ef4444, #f59e0b, #22c55e)`,
