@@ -2,6 +2,3 @@ node_modules/
 .cert/
 dist/
 project-management/
-
-# Large animated assets
-public/animated/
