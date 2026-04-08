@@ -5,6 +5,13 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import fs from 'fs'
 
+const basePath = (mode: string): string => {
+  return {
+    'development': '/',
+    'production': '/ard-fake-streaming-app/'
+  }[mode] ?? 'development'
+}
+
 export default defineConfig(({ mode }) => ({
   plugins: [
     // The React and Tailwind plugins are both required for Make, even if
@@ -13,6 +20,7 @@ export default defineConfig(({ mode }) => ({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      devOptions: { enabled: true },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg', 'animated/Ikosaeder-Animation.png', 'animated/Nagrasyster_encoded_frame.png'],
       manifest: {
         name: '3 Minutes',
@@ -22,8 +30,8 @@ export default defineConfig(({ mode }) => ({
         background_color: '#000000',
         display: 'fullscreen',
         orientation: 'portrait',
-        scope: '/ard-fake-streaming-app/',
-        start_url: '/ard-fake-streaming-app/',
+        scope: basePath(mode),
+        start_url: basePath(mode),
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -57,7 +65,7 @@ export default defineConfig(({ mode }) => ({
   assetsInclude: ['**/*.svg', '**/*.csv'],
 
   // GitHub Pages configuration
-  base: mode === 'production' ? '/ard-fake-streaming-app/' : '/',
+  base: basePath(mode),
 
   // HTTPS only for development (GitHub Pages serves over HTTP)
   server: mode === 'development' ? {
