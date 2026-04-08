@@ -1,14 +1,20 @@
+const counterSrc = `${import.meta.env.BASE_URL}animated/Counter_v02_H.264.webm`;
+
 interface CountdownScreenProps {
-  countdown: number;
+  onComplete: () => void;
 }
 
-export function CountdownScreen({ countdown }: CountdownScreenProps) {
+export function CountdownScreen({ onComplete }: CountdownScreenProps) {
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-purple-900 to-pink-900">
-      <div className="text-white text-2xl font-bold mb-4 animate-pulse">
-        DU BIST DRAN
-      </div>
-      <div className="text-white text-9xl font-black">{countdown}</div>
+    <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
+      <video
+        className="h-full w-full object-contain"
+        src={counterSrc}
+        autoPlay
+        muted
+        playsInline
+        onEnded={onComplete}
+      />
     </div>
   );
 }

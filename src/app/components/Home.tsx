@@ -45,7 +45,7 @@ export function Home() {
 
   if (cameraPermission === "denied") {
     return (
-      <div className="min-h-screen bg-zinc-900 flex items-center justify-center p-8 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
+      <div className="h-full bg-zinc-900 flex items-center justify-center p-8 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
         <div className="text-center space-y-4">
           <CameraOff className="w-12 h-12 text-red-500 mx-auto" />
           <p className="text-white text-lg font-bold">Kamera-Zugriff verweigert</p>
@@ -59,7 +59,7 @@ export function Home() {
 
   if (cameraPermission === "prompt") {
     return (
-      <div className="min-h-screen bg-zinc-900 flex items-center justify-center p-8 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
+      <div className="h-full bg-zinc-900 flex items-center justify-center p-8 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
         <div className="text-center space-y-6 w-full max-w-sm">
           <Camera className="w-16 h-16 text-purple-500 mx-auto" />
           <div>
@@ -82,7 +82,7 @@ export function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
+    <div className="h-full bg-zinc-900 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
       <div className="p-8 w-full max-w-sm">
         <h1 className="text-3xl font-bold text-white mb-2 text-center">
           StreamWin

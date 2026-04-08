@@ -1,12 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import { StreamHeader } from "./sender/StreamHeader";
-import { StreamControls } from "./sender/StreamControls";
 import { StartScreen } from "./sender/StartScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
 import { LiveScreen } from "./sender/LiveScreen";
 import { ResultScreen } from "./sender/ResultScreen";
-import { useCountdownTimer } from "../hooks/useCountdownTimer";
 import { useLiveStreamTimer } from "../hooks/useLiveStreamTimer";
 import { WIN_THRESHOLD } from "./sender/constants";
 
@@ -34,8 +31,9 @@ export function SenderMode() {
       img.src = src;
     });
 
-    // Preload overlay videos so they start instantly in live phase
+    // Preload overlay videos so they start instantly
     const videoSrcs = [
+      `${import.meta.env.BASE_URL}animated/Counter_v02_H.264.webm`,
       `${import.meta.env.BASE_URL}animated/movie-hevc.mov`,
       `${import.meta.env.BASE_URL}animated/movie-webm.webm`,
     ];
@@ -47,12 +45,6 @@ export function SenderMode() {
       document.head.appendChild(link);
     });
   }, []);
-
-  const { countdown, reset: resetCountdown } = useCountdownTimer({
-    active: phase === "countdown",
-    isPaused,
-    onComplete: () => setPhase("live"),
-  });
 
   const {
     liveTime,
@@ -110,7 +102,6 @@ export function SenderMode() {
     setResult(null);
     setIsPaused(false);
     stopCamera();
-    resetCountdown();
     resetLiveTimer();
   };
 
@@ -131,22 +122,9 @@ export function SenderMode() {
   };
 
   return (
-    <div className="relative w-full h-dvh bg-zinc-900 overflow-hidden">
-      <StreamHeader onBack={() => navigate("/")} />
-
-        {(phase === "countdown" || phase === "live") && (
-          <StreamControls
-            isPaused={isPaused}
-            onTogglePause={() => setIsPaused(!isPaused)}
-            onFastForward={handleFastForward}
-            onReset={handleReset}
-            onTriggerWin={triggerWin}
-            onTriggerLose={triggerLose}
-          />
-        )}
-
+    <div className="relative h-full bg-zinc-900">
         {phase === "start" && <StartScreen onStart={handleStart} />}
-        {phase === "countdown" && <CountdownScreen countdown={countdown} />}
+        {phase === "countdown" && <CountdownScreen onComplete={() => setPhase("live")} />}
         {phase === "live" && (
           <LiveScreen
             videoRef={videoRef}
