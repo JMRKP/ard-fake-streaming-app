@@ -5,9 +5,12 @@
   "scripts": {
     "dev:pwa": "pnpm --filter pwa dev",
     "build:pwa": "pnpm --filter pwa build",
+    "build:android": "CAPACITOR=1 pnpm --filter pwa build && pnpm cap:sync",
     "deploy": "pnpm --filter pwa deploy",
     "dev:controller": "pnpm --filter controller dev",
-    "build:controller": "pnpm --filter controller build"
+    "build:controller": "pnpm --filter controller build",
+    "cap:sync": "pnpm --filter pwa exec cap sync android",
+    "cap:open": "pnpm --filter pwa exec cap open android"
   },
   "pnpm": {
     "overrides": {

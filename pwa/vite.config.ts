@@ -5,12 +5,10 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import fs from 'fs'
 
-const basePath = (mode: string): string => {
-  return {
-    'development': '/',
-    'production': '/ard-fake-streaming-app/'
-  }[mode] ?? 'development'
-}
+ const basePath = (mode: string): string => {                                                            
+    if (process.env.CAPACITOR) return '/';                                                                
+    return mode === 'production' ? '/ard-fake-streaming-app/' : '/';                                      
+  }
 
 export default defineConfig(({ mode }) => ({
   plugins: [
