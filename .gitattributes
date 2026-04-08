@@ -1,1 +1,1 @@
-public/animated/Counter_v02_H.264.webm filter=lfs diff=lfs merge=lfs -text
+pwa/public/animated/** filter=lfs diff=lfs merge=lfs -text

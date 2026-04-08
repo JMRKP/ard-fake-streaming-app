@@ -48,8 +48,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
-        run: pnpm build
+      - name: Build PWA
+        run: pnpm --filter pwa build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -57,7 +57,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./pwa/dist
 
   deploy:
     environment:

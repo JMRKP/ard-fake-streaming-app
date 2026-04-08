@@ -70,8 +70,8 @@ export default defineConfig(({ mode }) => ({
   // HTTPS only for development (GitHub Pages serves over HTTP)
   server: mode === 'development' ? {
     https: {
-      key: fs.readFileSync('./.cert/key.pem'),
-      cert: fs.readFileSync('./.cert/cert.pem'),
+      key: fs.readFileSync('../.cert/key.pem'),
+      cert: fs.readFileSync('../.cert/cert.pem'),
     },
     host: true, // Allow access from network
   } : undefined,

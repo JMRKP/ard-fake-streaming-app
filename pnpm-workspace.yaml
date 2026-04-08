@@ -1,0 +1,5 @@
+packages:
+  - pwa
+  - controller
+  - server
+  - shared
