@@ -24,7 +24,6 @@ export function SenderMode() {
   useEffect(() => {
     const srcs = [
       `${import.meta.env.BASE_URL}animated/Ikosaeder-Animation.png`,
-      `${import.meta.env.BASE_URL}animated/Nagrasyster_encoded_frame.png`,
     ];
     srcs.forEach((src) => {
       const img = new Image();
@@ -34,8 +33,6 @@ export function SenderMode() {
     // Preload overlay videos so they start instantly
     const videoSrcs = [
       `${import.meta.env.BASE_URL}animated/Counter_v02_H.264.webm`,
-      `${import.meta.env.BASE_URL}animated/movie-hevc.mov`,
-      `${import.meta.env.BASE_URL}animated/movie-webm.webm`,
     ];
     videoSrcs.forEach((src) => {
       const link = document.createElement("link");
@@ -48,7 +45,6 @@ export function SenderMode() {
 
   const {
     liveTime,
-    viewCount,
     successLevel,
     reset: resetLiveTimer,
     fastForward,
@@ -128,7 +124,6 @@ export function SenderMode() {
         {phase === "live" && (
           <LiveScreen
             videoRef={videoRef}
-            viewCount={viewCount}
             successLevel={successLevel}
             liveTime={liveTime}
             onSwitchCamera={switchCamera}
@@ -137,7 +132,6 @@ export function SenderMode() {
         {phase === "result" && result && (
           <ResultScreen
             result={result}
-            viewCount={viewCount}
             successLevel={successLevel}
             onReset={handleReset}
           />

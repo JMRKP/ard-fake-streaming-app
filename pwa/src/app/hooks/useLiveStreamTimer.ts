@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import {
   STREAM_DURATION_SECONDS,
-  VIEW_COUNT_RANDOM_MAX,
-  VIEW_COUNT_RANDOM_MIN,
   SUCCESS_LEVEL_INCREMENT_MAX,
 } from "../components/sender/constants";
 
@@ -16,7 +14,6 @@ export function useLiveStreamTimer({
   onComplete: (successLevel: number) => void;
 }) {
   const [liveTime, setLiveTime] = useState(0);
-  const [viewCount, setViewCount] = useState(0);
   const [successLevel, setSuccessLevel] = useState(0);
   // Ref tracks the latest successLevel so the completion effect gets the final value
   // even though successLevel is not in its dependency array.
@@ -26,7 +23,6 @@ export function useLiveStreamTimer({
 
   const reset = useCallback(() => {
     setLiveTime(0);
-    setViewCount(0);
     setSuccessLevel(0);
     successLevelRef.current = 0;
   }, []);
@@ -39,14 +35,6 @@ export function useLiveStreamTimer({
     if (!active || isPaused || liveTime >= STREAM_DURATION_SECONDS) return;
     const timer = setTimeout(() => {
       setLiveTime((t) => t + 1);
-      setViewCount(
-        (prev) =>
-          prev +
-          Math.floor(
-            Math.random() * (VIEW_COUNT_RANDOM_MAX - VIEW_COUNT_RANDOM_MIN),
-          ) +
-          VIEW_COUNT_RANDOM_MIN,
-      );
       setSuccessLevel((prev) => {
         const next = Math.min(
           100,
@@ -65,5 +53,5 @@ export function useLiveStreamTimer({
     }
   }, [active, liveTime]);
 
-  return { liveTime, viewCount, successLevel, reset, fastForward };
+  return { liveTime, successLevel, reset, fastForward };
 }

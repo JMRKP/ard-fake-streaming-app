@@ -1,16 +1,13 @@
 import { Trophy, X } from "lucide-react";
-import { formatViewCount } from "../../utils/formatters";
 
 interface ResultScreenProps {
   result: "win" | "lose";
-  viewCount: number;
   successLevel: number;
   onReset: () => void;
 }
 
 export function ResultScreen({
   result,
-  viewCount,
   successLevel,
   onReset,
 }: ResultScreenProps) {
@@ -31,9 +28,6 @@ export function ResultScreen({
       {isWin ? (
         <>
           <Trophy className="w-32 h-32 text-yellow-400 mb-4" />
-          <div className="text-white text-3xl font-bold mb-2">
-            {formatViewCount(viewCount)} Zuschauer
-          </div>
           <div className="text-white/80 text-lg">
             Erfolgsrate: {Math.floor(successLevel)}%
           </div>

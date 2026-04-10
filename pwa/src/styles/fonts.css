@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Diginumbers';
+  src: url('../assets/fonts/Diginumbers_d-Regular.otf') format('opentype'),
+       url('../assets/fonts/Diginumbers_d-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.font-diginumbers {
+  font-family: 'Diginumbers', ui-monospace, monospace;
+}
