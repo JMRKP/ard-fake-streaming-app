@@ -16,41 +16,48 @@ export default defineConfig(({ mode }) => ({
     // Tailwind is not being actively used – do not remove them
     react(),
     tailwindcss(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      devOptions: { enabled: true },
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg', 'animated/Ikosaeder-Animation.png', 'animated/Nagrasyster_encoded_frame.png'],
-      manifest: {
-        name: '3 Minutes',
-        short_name: '3 Minutes',
-        description: 'Dummy PWA App for ARD production 3 Minutes',
-        theme_color: '#000000',
-        background_color: '#000000',
-        display: 'fullscreen',
-        orientation: 'portrait',
-        scope: basePath(mode),
-        start_url: basePath(mode),
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ],
-        categories: ['productivity', 'utilities']
-      }
-    })
+    // Skip VitePWA when building for Capacitor. A service worker inside a
+    // native wrapper is pointless (assets are packaged) and tends to serve
+    // stale precached bundles when the scheme or base path changes.
+    ...(process.env.CAPACITOR
+      ? []
+      : [
+          VitePWA({
+            registerType: 'autoUpdate',
+            devOptions: { enabled: true },
+            includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg', 'animated/Ikosaeder-Animation.png', 'animated/Nagrasyster_encoded_frame.png'],
+            manifest: {
+              name: '3 Minutes',
+              short_name: '3 Minutes',
+              description: 'Dummy PWA App for ARD production 3 Minutes',
+              theme_color: '#000000',
+              background_color: '#000000',
+              display: 'fullscreen',
+              orientation: 'portrait',
+              scope: basePath(mode),
+              start_url: basePath(mode),
+              icons: [
+                {
+                  src: 'pwa-192x192.png',
+                  sizes: '192x192',
+                  type: 'image/png'
+                },
+                {
+                  src: 'pwa-512x512.png',
+                  sizes: '512x512',
+                  type: 'image/png'
+                },
+                {
+                  src: 'pwa-512x512.png',
+                  sizes: '512x512',
+                  type: 'image/png',
+                  purpose: 'any maskable'
+                }
+              ],
+              categories: ['productivity', 'utilities']
+            }
+          })
+        ]),
   ],
   resolve: {
     alias: {
