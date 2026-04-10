@@ -4,7 +4,7 @@ interface PeakOMeterProps {
 
 export function PeakOMeter({ successLevel }: PeakOMeterProps) {
   return (
-    <div className="absolute top-48 left-4 right-4 z-20 rounded-2xl bg-black/60 p-3">
+    <div className="absolute top-4 left-4 right-4 z-20 rounded-2xl bg-black/60 p-3">
       <div className="text-white text-xs mb-2">Peak-O-Meter</div>
       <div className="relative">
         <div className="h-3 bg-zinc-800 rounded-full overflow-hidden">
