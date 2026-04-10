@@ -6,7 +6,7 @@ interface CountdownScreenProps {
 
 export function CountdownScreen({ onComplete }: CountdownScreenProps) {
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
+    <div className="absolute inset-0 flex items-center justify-center bg-black">
       <video
         className="h-full w-full object-contain"
         src={counterSrc}
