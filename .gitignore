@@ -6,3 +6,8 @@ project-management/
 
 # Capacitor - generated web assets copied into Android project
 pwa/android/app/src/main/assets/public/
+
+
+# env files
+.env
+.env.local

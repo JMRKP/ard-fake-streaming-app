@@ -31,6 +31,14 @@ export function useLiveStreamTimer({
     setLiveTime((t) => Math.min(STREAM_DURATION_SECONDS, t + seconds));
   }, []);
 
+  const seed = useCallback((seconds: number) => {
+    const clamped = Math.max(
+      0,
+      Math.min(STREAM_DURATION_SECONDS, Math.floor(seconds)),
+    );
+    setLiveTime(clamped);
+  }, []);
+
   useEffect(() => {
     if (!active || isPaused || liveTime >= STREAM_DURATION_SECONDS) return;
     const timer = setTimeout(() => {
@@ -53,5 +61,5 @@ export function useLiveStreamTimer({
     }
   }, [active, liveTime]);
 
-  return { liveTime, successLevel, reset, fastForward };
+  return { liveTime, successLevel, reset, fastForward, seed };
 }
