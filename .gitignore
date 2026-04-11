@@ -11,3 +11,6 @@ pwa/android/app/src/main/assets/public/
 # env files
 .env
 .env.local
+
+# large files
+pwa/public/animated/Streamer-Counter-OUT_v04.webm
