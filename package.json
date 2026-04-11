@@ -10,6 +10,7 @@
     "dev:controller": "pnpm --filter controller dev",
     "build:controller": "pnpm --filter controller build",
     "dev:server": "pnpm --filter server dev",
+    "dev:remote": "pnpm --parallel --stream --filter controller --filter server run dev",
     "cap:sync": "pnpm --filter pwa exec cap sync android",
     "cap:open": "pnpm --filter pwa exec cap open android"
   },
