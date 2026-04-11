@@ -1,12 +1,170 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import {
+  SOCKET_EVENTS,
+  type CommandPayload,
+  type HelloPayload,
+  type SenderCommand,
+} from "shared";
+import { socket } from "./lib/socket";
+import "./index.css";
+
+type LogEntry = { id: string; label: string; timestamp: number };
 
 function App() {
-  return <div>Controller</div>;
+  const [connected, setConnected] = useState(socket.connected);
+  const [sentLog, setSentLog] = useState<LogEntry[]>([]);
+  const [liveAt, setLiveAt] = useState(0);
+
+  useEffect(() => {
+    const onConnect = () => setConnected(true);
+    const onDisconnect = () => setConnected(false);
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
+
+  const pushLog = (label: string, timestamp: number) => {
+    setSentLog((prev) =>
+      [{ id: `${timestamp}-${Math.random()}`, label, timestamp }, ...prev].slice(
+        0,
+        5,
+      ),
+    );
+  };
+
+  const sendHello = () => {
+    const payload: HelloPayload = {
+      from: "controller",
+      message: "hello world",
+      timestamp: Date.now(),
+    };
+    socket.emit(SOCKET_EVENTS.HELLO, payload);
+    pushLog(`hello: ${payload.message}`, payload.timestamp);
+  };
+
+  const sendCommand = (command: SenderCommand) => {
+    const payload: CommandPayload = {
+      from: "controller",
+      command,
+      timestamp: Date.now(),
+    };
+    socket.emit(SOCKET_EVENTS.COMMAND, payload);
+    const label =
+      command.action === "start-live"
+        ? `start-live @ ${command.atSeconds}s`
+        : command.action;
+    pushLog(label, payload.timestamp);
+  };
+
+  const btn =
+    "rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-zinc-700 disabled:cursor-not-allowed py-3 px-4 font-medium transition-colors";
+
+  return (
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center p-6 gap-6">
+      <header className="w-full max-w-md flex items-center justify-between">
+        <h1 className="text-xl font-semibold">Controller</h1>
+        <div className="flex items-center gap-2 text-sm">
+          <span
+            className={`inline-block w-2.5 h-2.5 rounded-full ${
+              connected ? "bg-green-500" : "bg-red-500"
+            }`}
+          />
+          {connected ? "connected" : "disconnected"}
+        </div>
+      </header>
+
+      <button
+        type="button"
+        onClick={sendHello}
+        disabled={!connected}
+        className={`${btn} w-full max-w-md py-6 text-lg`}
+      >
+        Send hello world
+      </button>
+
+      <section className="w-full max-w-md flex flex-col gap-3">
+        <h2 className="text-sm uppercase tracking-wide text-zinc-400">
+          Sender control
+        </h2>
+
+        <button
+          type="button"
+          onClick={() => sendCommand({ action: "start-countdown" })}
+          disabled={!connected}
+          className={btn}
+        >
+          Start countdown
+        </button>
+
+        <div className="flex flex-col gap-2 rounded-xl bg-zinc-900 p-4">
+          <div className="flex items-center justify-between text-sm">
+            <label htmlFor="live-at">Start live at</label>
+            <span className="font-mono tabular-nums">{liveAt}s</span>
+          </div>
+          <input
+            id="live-at"
+            type="range"
+            min={0}
+            max={180}
+            step={1}
+            value={liveAt}
+            onChange={(e) => setLiveAt(Number(e.target.value))}
+            className="w-full accent-indigo-500"
+          />
+          <button
+            type="button"
+            onClick={() =>
+              sendCommand({ action: "start-live", atSeconds: liveAt })
+            }
+            disabled={!connected}
+            className={btn}
+          >
+            Start live @ {liveAt}s
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => sendCommand({ action: "go-home" })}
+          disabled={!connected}
+          className={btn}
+        >
+          Go home
+        </button>
+      </section>
+
+      <section className="w-full max-w-md">
+        <h2 className="text-sm uppercase tracking-wide text-zinc-400 mb-2">
+          Last sent
+        </h2>
+        {sentLog.length === 0 ? (
+          <p className="text-zinc-500 text-sm">Nothing sent yet.</p>
+        ) : (
+          <ul className="space-y-1 text-sm font-mono">
+            {sentLog.map((entry) => (
+              <li
+                key={entry.id}
+                className="bg-zinc-900 rounded px-3 py-2 flex justify-between gap-2"
+              >
+                <span>{entry.label}</span>
+                <span className="text-zinc-500">
+                  {new Date(entry.timestamp).toLocaleTimeString()}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
 }
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
-  </StrictMode>
+  </StrictMode>,
 );

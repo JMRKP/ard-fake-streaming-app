@@ -1,17 +1,18 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { StartScreen } from "./sender/StartScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
 import { LiveScreen } from "./sender/LiveScreen";
 import { ResultScreen } from "./sender/ResultScreen";
 import { useLiveStreamTimer } from "../hooks/useLiveStreamTimer";
-import { WIN_THRESHOLD } from "./sender/constants";
+import { STREAM_DURATION_SECONDS, WIN_THRESHOLD } from "./sender/constants";
 
 type Phase = "start" | "countdown" | "live" | "result";
 type Result = "win" | "lose" | null;
 
 export function SenderMode() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [phase, setPhase] = useState<Phase>("start");
   const [isPaused, setIsPaused] = useState(false);
@@ -48,6 +49,7 @@ export function SenderMode() {
     successLevel,
     reset: resetLiveTimer,
     fastForward,
+    seed: seedLiveTimer,
   } = useLiveStreamTimer({
       active: phase === "live",
       isPaused,
@@ -57,6 +59,29 @@ export function SenderMode() {
         stopCamera();
       },
     });
+
+  useEffect(() => {
+    const p = searchParams.get("phase");
+    if (!p) return;
+    if (p === "countdown") {
+      resetLiveTimer();
+      setPhase("countdown");
+    } else if (p === "live") {
+      const at = Math.max(
+        0,
+        Math.min(
+          STREAM_DURATION_SECONDS,
+          Math.floor(Number(searchParams.get("at") ?? "0")),
+        ),
+      );
+      resetLiveTimer();
+      seedLiveTimer(at);
+      setPhase("live");
+    }
+    setIsPaused(false);
+    setResult(null);
+    setSearchParams({}, { replace: true });
+  }, [searchParams, resetLiveTimer, seedLiveTimer, setSearchParams]);
 
   useEffect(() => {
     if (phase === "live") {

@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { RefObject, useState } from "react";
 import { SwitchCamera } from "lucide-react";
 import { Timer } from "./Timer";
 import { PeakOMeter } from "./PeakOMeter";
@@ -16,6 +16,8 @@ export function LiveScreen({
   liveTime,
   onSwitchCamera,
 }: LiveScreenProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
     <>
       <video
@@ -24,7 +26,10 @@ export function LiveScreen({
         playsInline
         muted
         aria-label="User camera feed"
-        className="absolute inset-0 w-full h-full object-cover"
+        onPlaying={() => setIsPlaying(true)}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${
+          isPlaying ? "opacity-100" : "opacity-0"
+        }`}
       />
 
       <button
