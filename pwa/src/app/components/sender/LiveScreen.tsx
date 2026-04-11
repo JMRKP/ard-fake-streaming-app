@@ -1,19 +1,18 @@
 import { RefObject, useState } from "react";
 import { SwitchCamera } from "lucide-react";
-import { Timer } from "./Timer";
-import { PeakOMeter } from "./PeakOMeter";
+import { CounterAnimation } from "./CounterAnimation";
 
 interface LiveScreenProps {
   videoRef: RefObject<HTMLVideoElement>;
-  successLevel: number;
-  liveTime: number;
+  initialSeconds: number;
+  onEnded: () => void;
   onSwitchCamera: () => void;
 }
 
 export function LiveScreen({
   videoRef,
-  successLevel,
-  liveTime,
+  initialSeconds,
+  onEnded,
   onSwitchCamera,
 }: LiveScreenProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -40,11 +39,7 @@ export function LiveScreen({
         <SwitchCamera className="w-6 h-6" />
       </button>
 
-      <PeakOMeter successLevel={successLevel} />
-
-      <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center">
-        <Timer seconds={liveTime} />
-      </div>
+      <CounterAnimation initialSeconds={initialSeconds} onEnded={onEnded} />
     </>
   );
 }

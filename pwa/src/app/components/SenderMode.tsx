@@ -1,22 +1,18 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { StartScreen } from "./sender/StartScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
 import { LiveScreen } from "./sender/LiveScreen";
 import { ResultScreen } from "./sender/ResultScreen";
-import { useLiveStreamTimer } from "../hooks/useLiveStreamTimer";
-import { STREAM_DURATION_SECONDS, WIN_THRESHOLD } from "./sender/constants";
+import { STREAM_DURATION_SECONDS } from "./sender/constants";
 
 type Phase = "start" | "countdown" | "live" | "result";
-type Result = "win" | "lose" | null;
 
 export function SenderMode() {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [phase, setPhase] = useState<Phase>("start");
-  const [isPaused, setIsPaused] = useState(false);
-  const [result, setResult] = useState<Result>(null);
+  const [initialLiveSeconds, setInitialLiveSeconds] = useState(0);
   const [cameraFacing, setCameraFacing] = useState<"user" | "environment">(
     "user",
   );
@@ -34,6 +30,7 @@ export function SenderMode() {
     // Preload overlay videos so they start instantly
     const videoSrcs = [
       `${import.meta.env.BASE_URL}animated/Counter_v02_H.264.webm`,
+      `${import.meta.env.BASE_URL}animated/Streamer-Counter-OUT_v04.webm`,
     ];
     videoSrcs.forEach((src) => {
       const link = document.createElement("link");
@@ -44,27 +41,11 @@ export function SenderMode() {
     });
   }, []);
 
-  const {
-    liveTime,
-    successLevel,
-    reset: resetLiveTimer,
-    fastForward,
-    seed: seedLiveTimer,
-  } = useLiveStreamTimer({
-      active: phase === "live",
-      isPaused,
-      onComplete: (finalSuccessLevel) => {
-        setResult(finalSuccessLevel >= WIN_THRESHOLD ? "win" : "lose");
-        setPhase("result");
-        stopCamera();
-      },
-    });
-
   useEffect(() => {
     const p = searchParams.get("phase");
     if (!p) return;
     if (p === "countdown") {
-      resetLiveTimer();
+      setInitialLiveSeconds(0);
       setPhase("countdown");
     } else if (p === "live") {
       const at = Math.max(
@@ -74,14 +55,11 @@ export function SenderMode() {
           Math.floor(Number(searchParams.get("at") ?? "0")),
         ),
       );
-      resetLiveTimer();
-      seedLiveTimer(at);
+      setInitialLiveSeconds(at);
       setPhase("live");
     }
-    setIsPaused(false);
-    setResult(null);
     setSearchParams({}, { replace: true });
-  }, [searchParams, resetLiveTimer, seedLiveTimer, setSearchParams]);
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     if (phase === "live") {
@@ -118,27 +96,14 @@ export function SenderMode() {
 
   const handleStart = () => setPhase("countdown");
 
+  const handleLiveEnded = () => {
+    setPhase("result");
+    stopCamera();
+  };
+
   const handleReset = () => {
     setPhase("start");
-    setResult(null);
-    setIsPaused(false);
-    stopCamera();
-    resetLiveTimer();
-  };
-
-  const handleFastForward = () => {
-    if (phase === "live") fastForward(30);
-  };
-
-  const triggerWin = () => {
-    setResult("win");
-    setPhase("result");
-    stopCamera();
-  };
-
-  const triggerLose = () => {
-    setResult("lose");
-    setPhase("result");
+    setInitialLiveSeconds(0);
     stopCamera();
   };
 
@@ -149,15 +114,15 @@ export function SenderMode() {
         {phase === "live" && (
           <LiveScreen
             videoRef={videoRef}
-            successLevel={successLevel}
-            liveTime={liveTime}
+            initialSeconds={initialLiveSeconds}
+            onEnded={handleLiveEnded}
             onSwitchCamera={switchCamera}
           />
         )}
-        {phase === "result" && result && (
+        {phase === "result" && (
           <ResultScreen
-            result={result}
-            successLevel={successLevel}
+            result="win"
+            successLevel={100}
             onReset={handleReset}
           />
         )}
