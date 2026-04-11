@@ -52,6 +52,18 @@ jobs:
 
       - name: Build PWA
         run: pnpm --filter pwa build
+        env:
+          VITE_WS_URL: wss://three-minutes-ws.fly.dev
+
+      - name: Build Controller
+        run: pnpm --filter controller build
+        env:
+          VITE_WS_URL: wss://three-minutes-ws.fly.dev
+
+      - name: Nest controller into PWA dist
+        run: |
+          mkdir -p pwa/dist/controller
+          cp -R controller/dist/. pwa/dist/controller/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

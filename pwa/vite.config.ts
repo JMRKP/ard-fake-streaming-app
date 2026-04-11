@@ -26,6 +26,9 @@ export default defineConfig(({ mode }) => ({
             registerType: 'autoUpdate',
             devOptions: { enabled: true },
             includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg', 'animated/Ikosaeder-Animation.png', 'animated/Nagrasyster_encoded_frame.png'],
+            workbox: {
+              navigateFallbackDenylist: [/\/controller(\/|$)/],
+            },
             manifest: {
               name: '3 Minutes',
               short_name: '3 Minutes',
