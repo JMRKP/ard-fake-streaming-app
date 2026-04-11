@@ -6,24 +6,45 @@ import {
   type HelloPayload,
   type SenderCommand,
 } from "shared";
-import { socket } from "./lib/socket";
+import { socket, resetWsToken } from "./lib/socket";
 import "./index.css";
 
 type LogEntry = { id: string; label: string; timestamp: number };
+type SocketStatus =
+  | "connecting"
+  | "connected"
+  | "disconnected"
+  | "unauthorized";
+
+const STATUS_DOT: Record<SocketStatus, string> = {
+  connecting: "bg-yellow-500",
+  connected: "bg-green-500",
+  disconnected: "bg-zinc-500",
+  unauthorized: "bg-red-500",
+};
 
 function App() {
-  const [connected, setConnected] = useState(socket.connected);
+  const [status, setStatus] = useState<SocketStatus>(
+    socket.connected ? "connected" : "connecting",
+  );
   const [sentLog, setSentLog] = useState<LogEntry[]>([]);
   const [liveAt, setLiveAt] = useState(0);
 
+  const connected = status === "connected";
+
   useEffect(() => {
-    const onConnect = () => setConnected(true);
-    const onDisconnect = () => setConnected(false);
+    const onConnect = () => setStatus("connected");
+    const onDisconnect = () => setStatus("disconnected");
+    const onConnectError = (err: Error) => {
+      setStatus(err.message === "unauthorized" ? "unauthorized" : "connecting");
+    };
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
+    socket.on("connect_error", onConnectError);
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
+      socket.off("connect_error", onConnectError);
     };
   }, []);
 
@@ -67,13 +88,20 @@ function App() {
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center p-6 gap-6">
       <header className="w-full max-w-md flex items-center justify-between">
         <h1 className="text-xl font-semibold">Controller</h1>
-        <div className="flex items-center gap-2 text-sm">
-          <span
-            className={`inline-block w-2.5 h-2.5 rounded-full ${
-              connected ? "bg-green-500" : "bg-red-500"
-            }`}
-          />
-          {connected ? "connected" : "disconnected"}
+        <div className="flex items-center gap-3 text-sm">
+          <div className="flex items-center gap-2">
+            <span
+              className={`inline-block w-2.5 h-2.5 rounded-full ${STATUS_DOT[status]}`}
+            />
+            {status}
+          </div>
+          <button
+            type="button"
+            onClick={resetWsToken}
+            className="text-zinc-400 underline underline-offset-2 hover:text-zinc-100 transition-colors text-xs"
+          >
+            Reset token
+          </button>
         </div>
       </header>
 

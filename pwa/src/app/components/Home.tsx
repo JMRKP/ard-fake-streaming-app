@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Video, Eye, Camera, CameraOff } from "lucide-react";
+import { ConnectionStatus } from "./ConnectionStatus";
 
 type CameraPermission = "unknown" | "granted" | "prompt" | "denied";
 
@@ -84,6 +85,7 @@ export function Home() {
   return (
     <div className="h-full bg-zinc-900 flex items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
       <div className="p-8 w-full max-w-sm">
+        <ConnectionStatus />
         <h1 className="text-3xl font-bold text-white mb-2 text-center">
           StreamWin
         </h1>
