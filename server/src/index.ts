@@ -4,7 +4,6 @@ import {
   type ClientRole,
   type ClientToServerEvents,
   type CommandPayload,
-  type HelloPayload,
   type ServerToClientEvents,
 } from "shared";
 
@@ -45,11 +44,6 @@ io.on("connection", (socket) => {
   const room = role === "controller" ? "controllers" : "pwas";
   socket.join(room);
   console.log(`[+] ${role} connected (${socket.id})`);
-
-  socket.on(SOCKET_EVENTS.HELLO, (payload: HelloPayload) => {
-    console.log("[hello]", payload);
-    io.to("pwas").emit(SOCKET_EVENTS.HELLO, payload);
-  });
 
   socket.on(SOCKET_EVENTS.COMMAND, (payload: CommandPayload) => {
     console.log("[command]", payload);

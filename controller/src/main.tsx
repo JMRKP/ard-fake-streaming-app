@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import {
   SOCKET_EVENTS,
   type CommandPayload,
-  type HelloPayload,
   type SenderCommand,
 } from "shared";
 import { socket, resetWsToken } from "./lib/socket";
@@ -57,16 +56,6 @@ function App() {
     );
   };
 
-  const sendHello = () => {
-    const payload: HelloPayload = {
-      from: "controller",
-      message: "hello world",
-      timestamp: Date.now(),
-    };
-    socket.emit(SOCKET_EVENTS.HELLO, payload);
-    pushLog(`hello: ${payload.message}`, payload.timestamp);
-  };
-
   const sendCommand = (command: SenderCommand) => {
     const payload: CommandPayload = {
       from: "controller",
@@ -104,15 +93,6 @@ function App() {
           </button>
         </div>
       </header>
-
-      <button
-        type="button"
-        onClick={sendHello}
-        disabled={!connected}
-        className={`${btn} w-full max-w-md py-6 text-lg`}
-      >
-        Send hello world
-      </button>
 
       <section className="w-full max-w-md flex flex-col gap-3">
         <h2 className="text-sm uppercase tracking-wide text-zinc-400">
