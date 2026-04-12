@@ -1,38 +1,47 @@
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+
+export interface CounterAnimationHandle {
+  play(seconds: number): void;
+  readonly ready: Promise<void>;
+}
 
 interface CounterAnimationProps {
-  initialSeconds: number;
   onEnded: () => void;
 }
 
-export function CounterAnimation({
-  initialSeconds,
-  onEnded,
-}: CounterAnimationProps) {
+export const CounterAnimation = forwardRef<
+  CounterAnimationHandle,
+  CounterAnimationProps
+>(function CounterAnimation({ onEnded }, ref) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  const readyPromise = useRef<Promise<void>>();
+  if (!readyPromise.current) {
+    readyPromise.current = new Promise<void>((resolve) => {
+      const check = () => {
+        const v = videoRef.current;
+        if (v && v.readyState >= 1) {
+          resolve();
+          return;
+        }
+        requestAnimationFrame(check);
+      };
+      requestAnimationFrame(check);
+    });
+  }
 
-    const start = () => {
-      try {
-        video.currentTime = initialSeconds;
-      } catch {
-        // ignore — will retry once metadata is loaded
-      }
+  useImperativeHandle(ref, () => ({
+    play(seconds: number) {
+      const video = videoRef.current;
+      if (!video) return;
+      video.currentTime = seconds;
       video.play().catch(() => {});
-    };
-
-    if (video.readyState >= 1) {
-      
-      start();
-    } else {
-      video.addEventListener("loadedmetadata", start, { once: true });
-      return () => video.removeEventListener("loadedmetadata", start);
-    }
-  }, [initialSeconds]);
+    },
+    get ready() {
+      return readyPromise.current!;
+    },
+  }));
 
   return (
     <div className="absolute bottom-12 left-0 right-0 z-20 flex justify-center">
@@ -50,4 +59,4 @@ export function CounterAnimation({
       />
     </div>
   );
-}
+});

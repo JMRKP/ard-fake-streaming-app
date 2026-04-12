@@ -31,6 +31,7 @@ export function SenderMode() {
     const videoSrcs = [
       `${import.meta.env.BASE_URL}animated/Counter_v02_H.264.webm`,
       `${import.meta.env.BASE_URL}animated/Streamer-Counter-OUT_v04.webm`,
+      `${import.meta.env.BASE_URL}animated/Barometer_G1_v05.webm`,
     ];
     videoSrcs.forEach((src) => {
       const link = document.createElement("link");

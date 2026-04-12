@@ -1,6 +1,7 @@
-import { RefObject, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { SwitchCamera } from "lucide-react";
-import { CounterAnimation } from "./CounterAnimation";
+import { CounterAnimation, CounterAnimationHandle } from "./CounterAnimation";
+import { ViewCountGraph, ViewCountGraphHandle } from "./ViewCountGraph";
 
 interface LiveScreenProps {
   videoRef: RefObject<HTMLVideoElement>;
@@ -16,6 +17,19 @@ export function LiveScreen({
   onSwitchCamera,
 }: LiveScreenProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const counterRef = useRef<CounterAnimationHandle>(null);
+  const graphRef = useRef<ViewCountGraphHandle>(null);
+
+  useEffect(() => {
+    const counter = counterRef.current;
+    const graph = graphRef.current;
+    if (!counter || !graph) return;
+
+    Promise.all([counter.ready, graph.ready]).then(() => {
+      counter.play(initialSeconds);
+      graph.play(initialSeconds);
+    });
+  }, [initialSeconds]);
 
   return (
     <>
@@ -31,6 +45,8 @@ export function LiveScreen({
         }`}
       />
 
+      <ViewCountGraph ref={graphRef} />
+
       <button
         onClick={onSwitchCamera}
         className="absolute top-36 right-4 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors"
@@ -39,7 +55,7 @@ export function LiveScreen({
         <SwitchCamera className="w-6 h-6" />
       </button>
 
-      <CounterAnimation initialSeconds={initialSeconds} onEnded={onEnded} />
+      <CounterAnimation ref={counterRef} onEnded={onEnded} />
     </>
   );
 }
