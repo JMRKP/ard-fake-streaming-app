@@ -3,7 +3,6 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
-import fs from 'fs'
 
  const basePath = (mode: string): string => {                                                            
     if (process.env.CAPACITOR) return '/';                                                                
@@ -75,14 +74,9 @@ export default defineConfig(({ mode }) => ({
   // GitHub Pages configuration
   base: basePath(mode),
 
-  // HTTPS only for development (GitHub Pages serves over HTTP)
-  server: mode === 'development' ? {
-    https: {
-      key: fs.readFileSync('../.cert/key.pem'),
-      cert: fs.readFileSync('../.cert/cert.pem'),
-    },
+  server: {
     host: true, // Allow access from network
-  } : undefined,
+  },
 
   // Build configuration for GitHub Pages
   build: {
