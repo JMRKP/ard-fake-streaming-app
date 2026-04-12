@@ -32,6 +32,7 @@ export function SenderMode() {
       `${import.meta.env.BASE_URL}animated/Counter_v02_H.264.webm`,
       `${import.meta.env.BASE_URL}animated/Streamer-Counter-OUT_v04.webm`,
       `${import.meta.env.BASE_URL}animated/Barometer_G1_v05.webm`,
+      `${import.meta.env.BASE_URL}animated/WON_v04.webm`,
     ];
     videoSrcs.forEach((src) => {
       const link = document.createElement("link");
@@ -102,12 +103,6 @@ export function SenderMode() {
     stopCamera();
   };
 
-  const handleReset = () => {
-    setPhase("start");
-    setInitialLiveSeconds(0);
-    stopCamera();
-  };
-
   return (
     <div className="relative h-full bg-zinc-900">
         {phase === "start" && <StartScreen onStart={handleStart} />}
@@ -121,11 +116,7 @@ export function SenderMode() {
           />
         )}
         {phase === "result" && (
-          <ResultScreen
-            result="win"
-            successLevel={100}
-            onReset={handleReset}
-          />
+          <ResultScreen />
         )}
     </div>
   );
