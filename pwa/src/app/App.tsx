@@ -1,12 +1,17 @@
 import { RouterProvider } from 'react-router';
 import { router } from './routes';
-import { ControllerToast } from './components/ControllerToast';
+import { useRemoteRouter } from './hooks/useRemoteRouter';
+
+function RemoteRouter() {
+  useRemoteRouter();
+  return null;
+}
 
 export default function App() {
   return (
     <>
       <RouterProvider router={router} />
-      <ControllerToast />
+      <RemoteRouter />
     </>
   );
 }
