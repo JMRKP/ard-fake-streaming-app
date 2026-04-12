@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 pnpm workspaces monorepo with four packages:
 
-- `pwa/` — the main user-facing PWA (React + Vite + TypeScript), deployed to GitHub Pages
+- `pwa/` — the main app (React + Vite + TypeScript), runs natively on Android via Capacitor; also deployed to GitHub Pages for debugging
 - `controller/` — controller app for managing the PWA remotely (scaffold)
 - `server/` — WebSocket server for communication between controller and PWA (scaffold)
 - `shared/` — shared types and constants used by all packages (scaffold)
@@ -15,18 +15,18 @@ pnpm workspaces monorepo with four packages:
 
 ```bash
 pnpm install              # Install all workspace dependencies
-pnpm dev:pwa              # Start PWA dev server (HTTPS, requires .cert/ for camera)
-pnpm build:pwa            # Production build PWA → pwa/dist/
-pnpm deploy               # Build + deploy PWA to GitHub Pages
+pnpm dev:pwa              # Start dev server (HTTPS, requires .cert/ for camera)
+pnpm build:pwa            # Production build → pwa/dist/
+pnpm deploy               # Build + deploy to GitHub Pages
 pnpm dev:controller       # Start controller dev server (port 5174)
 pnpm build:controller     # Production build controller
 ```
 
 No linting or test commands are configured.
 
-## PWA Architecture
+## App Architecture
 
-**React + Vite + TypeScript PWA** deployed to GitHub Pages at `https://jmrkp.github.io/ard-fake-streaming-app/`. The app runs in fullscreen mode and should feel as native as possible - without any OS details (iOS, Android).
+**React + Vite + TypeScript** app that runs natively on Android via Capacitor (`pwa/android/`). A web build is also deployed to GitHub Pages at `https://jmrkp.github.io/ard-fake-streaming-app/` for debugging and quick browser reference. The app runs in fullscreen mode and should feel as native as possible.
 
 The app is a fake ARD (German broadcaster) live-streaming prototype with three routes (defined in `pwa/src/app/routes.ts`):
 - `/` → `Home.tsx` — landing/mode selection
