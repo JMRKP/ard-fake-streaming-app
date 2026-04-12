@@ -9,10 +9,7 @@ const config: CapacitorConfig = {
     overrideUserAgent: undefined,
   },
   server: {
-    // Use http so the WebView can open plain ws:// connections to the
-    // local dev server without mixed-content blocks. localhost is still a
-    // secure context per spec, so getUserMedia / service workers keep working.
-    androidScheme: 'http',
+    androidScheme: 'https',
   },
 };
 

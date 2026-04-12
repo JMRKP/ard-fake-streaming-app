@@ -22,6 +22,7 @@ export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   {
     query: { role: "pwa" },
     auth: { token: getWsToken() },
+    transports: ["websocket"],
     autoConnect: true,
     reconnection: true,
     reconnectionAttempts: Infinity,
