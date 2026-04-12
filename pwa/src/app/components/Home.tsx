@@ -68,7 +68,7 @@ export function Home() {
               Kamera-Zugriff benötigt
             </p>
             <p className="text-zinc-400 text-sm">
-              StreamWin benötigt deine Kamera, um live zu streamen.
+              3 Minuten benötigt deine Kamera, um live zu streamen.
             </p>
           </div>
           <button
@@ -87,7 +87,7 @@ export function Home() {
       <div className="p-8 w-full max-w-sm">
         <ConnectionStatus />
         <h1 className="text-3xl font-bold text-white mb-2 text-center">
-          StreamWin
+          3 Minuten
         </h1>
         <p className="text-zinc-400 text-center mb-8">
           Fake Streaming App
