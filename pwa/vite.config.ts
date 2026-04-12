@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => ({
           VitePWA({
             registerType: 'autoUpdate',
             devOptions: { enabled: true },
-            includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg', 'animated/Ikosaeder-Animation.png', 'animated/Nagrasyster_encoded_frame.png'],
+            includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg', 'animated/Nagrasyster_encoded_frame.png'],
             workbox: {
               navigateFallbackDenylist: [/\/controller(\/|$)/],
             },

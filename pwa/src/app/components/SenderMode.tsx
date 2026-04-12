@@ -17,17 +17,8 @@ export function SenderMode() {
     "user",
   );
 
-  // Preload animated PNGs so they're decoded before the live phase
+  // Preload overlay videos so they start instantly
   useEffect(() => {
-    const srcs = [
-      `${import.meta.env.BASE_URL}animated/Ikosaeder-Animation.png`,
-    ];
-    srcs.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
-
-    // Preload overlay videos so they start instantly
     const videoSrcs = [
       `${import.meta.env.BASE_URL}animated/Counter_v02_H.264.webm`,
       `${import.meta.env.BASE_URL}animated/Streamer-Counter-OUT_v04.webm`,
