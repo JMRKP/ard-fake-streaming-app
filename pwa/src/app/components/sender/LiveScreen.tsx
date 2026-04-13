@@ -42,6 +42,12 @@ export function LiveScreen({ initialSeconds }: LiveScreenProps) {
   }, [cameraFacing]);
 
   useEffect(() => {
+    // Reset ending state when remote control navigates back within live phase
+    if (ending) {
+      setEnding(false);
+      startCamera(cameraFacing);
+    }
+
     const counter = counterRef.current;
     const graph = graphRef.current;
     if (!counter || !graph) return;
@@ -52,6 +58,13 @@ export function LiveScreen({ initialSeconds }: LiveScreenProps) {
     });
   }, [initialSeconds]);
 
+  // Stop camera 5 seconds after ending starts (when backdrop appears)
+  useEffect(() => {
+    if (!ending) return;
+    const timer = setTimeout(() => stopCamera(), 5000);
+    return () => clearTimeout(timer);
+  }, [ending]);
+
   const switchCamera = () => {
     stopCamera();
     setCameraFacing((prev) => (prev === "user" ? "environment" : "user"));
@@ -59,7 +72,6 @@ export function LiveScreen({ initialSeconds }: LiveScreenProps) {
 
   const handleCounterEnded = () => {
     setEnding(true);
-    stopCamera();
   };
 
   return (
