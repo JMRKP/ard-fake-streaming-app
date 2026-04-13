@@ -3,9 +3,10 @@ import { useSearchParams } from "react-router";
 import { StartScreen } from "./sender/StartScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
 import { LiveScreen } from "./sender/LiveScreen";
+import { ResultScreen } from "./sender/ResultScreen";
 import { STREAM_DURATION_SECONDS } from "./sender/constants";
 
-type Phase = "start" | "countdown" | "live";
+type Phase = "start" | "countdown" | "live" | "result";
 
 export function SenderMode() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -58,8 +59,12 @@ export function SenderMode() {
         <CountdownScreen onComplete={() => setPhase("live")} />
       )}
       {phase === "live" && (
-        <LiveScreen initialSeconds={initialLiveSeconds} />
+        <LiveScreen
+          initialSeconds={initialLiveSeconds}
+          onEnded={() => setPhase("result")}
+        />
       )}
+      {phase === "result" && <ResultScreen />}
     </div>
   );
 }
