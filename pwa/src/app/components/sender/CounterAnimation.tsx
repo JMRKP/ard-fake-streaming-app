@@ -47,7 +47,7 @@ export const CounterAnimation = forwardRef<
     <div className="absolute bottom-12 left-0 right-0 z-20 flex justify-center">
       <video
         ref={videoRef}
-        src={`${import.meta.env.BASE_URL}animated/Streamer-Counter-OUT_v04.webm`}
+        src={`${import.meta.env.BASE_URL}animated/Streamer-Counter-OUT_v05b.webm`}
         muted
         playsInline
         preload="auto"

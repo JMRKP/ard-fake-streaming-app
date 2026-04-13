@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const counterSrc = `${import.meta.env.BASE_URL}animated/Counter_v02_H.264.webm`;
+const counterSrc = `${import.meta.env.BASE_URL}animated/START-COUNTER-OUT_v04.webm`;
 
 interface CountdownScreenProps {
   onComplete: () => void;
