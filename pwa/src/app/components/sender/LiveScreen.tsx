@@ -1,24 +1,45 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SwitchCamera } from "lucide-react";
 import { CounterAnimation, CounterAnimationHandle } from "./CounterAnimation";
 import { ResultAnimation } from "./ResultAnimation";
 import { ViewCountGraph, ViewCountGraphHandle } from "./ViewCountGraph";
 
 interface LiveScreenProps {
-  videoRef: RefObject<HTMLVideoElement>;
   initialSeconds: number;
-  onSwitchCamera: () => void;
 }
 
-export function LiveScreen({
-  videoRef,
-  initialSeconds,
-  onSwitchCamera,
-}: LiveScreenProps) {
+export function LiveScreen({ initialSeconds }: LiveScreenProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [ending, setEnding] = useState(false);
+  const [cameraFacing, setCameraFacing] = useState<"user" | "environment">("user");
   const counterRef = useRef<CounterAnimationHandle>(null);
   const graphRef = useRef<ViewCountGraphHandle>(null);
+
+  const startCamera = async (facingMode: "user" | "environment") => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode },
+        audio: false,
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error("Kamera-Fehler:", err);
+    }
+  };
+
+  const stopCamera = () => {
+    if (videoRef.current?.srcObject instanceof MediaStream) {
+      videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+    }
+  };
+
+  useEffect(() => {
+    startCamera(cameraFacing);
+    return () => stopCamera();
+  }, [cameraFacing]);
 
   useEffect(() => {
     const counter = counterRef.current;
@@ -31,11 +52,14 @@ export function LiveScreen({
     });
   }, [initialSeconds]);
 
+  const switchCamera = () => {
+    stopCamera();
+    setCameraFacing((prev) => (prev === "user" ? "environment" : "user"));
+  };
+
   const handleCounterEnded = () => {
     setEnding(true);
-    if (videoRef.current?.srcObject instanceof MediaStream) {
-      videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-    }
+    stopCamera();
   };
 
   return (
@@ -55,7 +79,7 @@ export function LiveScreen({
       <ViewCountGraph ref={graphRef} />
 
       <button
-        onClick={onSwitchCamera}
+        onClick={switchCamera}
         className="absolute top-36 right-4 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors"
         title="Kamera wechseln"
       >

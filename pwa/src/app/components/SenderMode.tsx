@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import { StartScreen } from "./sender/StartScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
@@ -9,12 +9,8 @@ type Phase = "start" | "countdown" | "live";
 
 export function SenderMode() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [phase, setPhase] = useState<Phase>("start");
   const [initialLiveSeconds, setInitialLiveSeconds] = useState(0);
-  const [cameraFacing, setCameraFacing] = useState<"user" | "environment">(
-    "user",
-  );
 
   // Preload overlay videos so they start instantly
   useEffect(() => {
@@ -53,39 +49,6 @@ export function SenderMode() {
     setSearchParams({}, { replace: true });
   }, [searchParams, setSearchParams]);
 
-  useEffect(() => {
-    if (phase === "live") {
-      startCamera();
-    } else {
-      stopCamera();
-    }
-  }, [phase, cameraFacing]);
-
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: cameraFacing },
-        audio: false,
-      });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (err) {
-      console.error("Kamera-Fehler:", err);
-    }
-  };
-
-  const stopCamera = () => {
-    if (videoRef.current?.srcObject instanceof MediaStream) {
-      videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-    }
-  };
-
-  const switchCamera = () => {
-    stopCamera();
-    setCameraFacing((prev) => (prev === "user" ? "environment" : "user"));
-  };
-
   const handleStart = () => setPhase("countdown");
 
   return (
@@ -95,11 +58,7 @@ export function SenderMode() {
         <CountdownScreen onComplete={() => setPhase("live")} />
       )}
       {phase === "live" && (
-        <LiveScreen
-          videoRef={videoRef}
-          initialSeconds={initialLiveSeconds}
-          onSwitchCamera={switchCamera}
-        />
+        <LiveScreen initialSeconds={initialLiveSeconds} />
       )}
     </div>
   );
