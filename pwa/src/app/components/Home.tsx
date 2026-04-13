@@ -1,31 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Video, Eye, Camera, CameraOff } from "lucide-react";
 import { ConnectionStatus } from "./ConnectionStatus";
 
-type CameraPermission = "unknown" | "granted" | "prompt" | "denied";
+const CAMERA_PERMISSION_KEY = "cameraPermission";
+
+type CameraPermission = "granted" | "prompt" | "denied";
+
+function getSavedPermission(): CameraPermission {
+  const saved = localStorage.getItem(CAMERA_PERMISSION_KEY);
+  if (saved === "granted" || saved === "denied") return saved;
+  return "prompt";
+}
 
 export function Home() {
   const navigate = useNavigate();
-  const [cameraPermission, setCameraPermission] = useState<CameraPermission>("unknown");
-
-  useEffect(() => {
-    if (!navigator.permissions) {
-      setCameraPermission("prompt");
-      return;
-    }
-    navigator.permissions
-      .query({ name: "camera" as PermissionName })
-      .then((status) => {
-        setCameraPermission(status.state as CameraPermission);
-        status.onchange = () => {
-          setCameraPermission(status.state as CameraPermission);
-        };
-      })
-      .catch(() => {
-        setCameraPermission("prompt");
-      });
-  }, []);
+  const [cameraPermission, setCameraPermission] = useState<CameraPermission>(getSavedPermission);
 
   const requestCameraAccess = async () => {
     try {
@@ -34,15 +24,13 @@ export function Home() {
         audio: false,
       });
       stream.getTracks().forEach((track) => track.stop());
+      localStorage.setItem(CAMERA_PERMISSION_KEY, "granted");
       setCameraPermission("granted");
     } catch {
+      localStorage.setItem(CAMERA_PERMISSION_KEY, "denied");
       setCameraPermission("denied");
     }
   };
-
-  if (cameraPermission === "unknown") {
-    return null;
-  }
 
   if (cameraPermission === "denied") {
     return (
