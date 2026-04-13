@@ -3,10 +3,9 @@ import { useSearchParams } from "react-router";
 import { StartScreen } from "./sender/StartScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
 import { LiveScreen } from "./sender/LiveScreen";
-import { ResultScreen } from "./sender/ResultScreen";
 import { STREAM_DURATION_SECONDS } from "./sender/constants";
 
-type Phase = "start" | "countdown" | "live" | "result";
+type Phase = "start" | "countdown" | "live";
 
 export function SenderMode() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -89,26 +88,19 @@ export function SenderMode() {
 
   const handleStart = () => setPhase("countdown");
 
-  const handleLiveEnded = () => {
-    setPhase("result");
-    stopCamera();
-  };
-
   return (
     <div className="relative h-full bg-zinc-900">
-        {phase === "start" && <StartScreen onStart={handleStart} />}
-        {phase === "countdown" && <CountdownScreen onComplete={() => setPhase("live")} />}
-        {phase === "live" && (
-          <LiveScreen
-            videoRef={videoRef}
-            initialSeconds={initialLiveSeconds}
-            onEnded={handleLiveEnded}
-            onSwitchCamera={switchCamera}
-          />
-        )}
-        {phase === "result" && (
-          <ResultScreen />
-        )}
+      {phase === "start" && <StartScreen onStart={handleStart} />}
+      {phase === "countdown" && (
+        <CountdownScreen onComplete={() => setPhase("live")} />
+      )}
+      {phase === "live" && (
+        <LiveScreen
+          videoRef={videoRef}
+          initialSeconds={initialLiveSeconds}
+          onSwitchCamera={switchCamera}
+        />
+      )}
     </div>
   );
 }

@@ -1,22 +1,22 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 import { SwitchCamera } from "lucide-react";
 import { CounterAnimation, CounterAnimationHandle } from "./CounterAnimation";
+import { ResultAnimation } from "./ResultAnimation";
 import { ViewCountGraph, ViewCountGraphHandle } from "./ViewCountGraph";
 
 interface LiveScreenProps {
   videoRef: RefObject<HTMLVideoElement>;
   initialSeconds: number;
-  onEnded: () => void;
   onSwitchCamera: () => void;
 }
 
 export function LiveScreen({
   videoRef,
   initialSeconds,
-  onEnded,
   onSwitchCamera,
 }: LiveScreenProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [ending, setEnding] = useState(false);
   const counterRef = useRef<CounterAnimationHandle>(null);
   const graphRef = useRef<ViewCountGraphHandle>(null);
 
@@ -30,6 +30,13 @@ export function LiveScreen({
       graph.play(initialSeconds);
     });
   }, [initialSeconds]);
+
+  const handleCounterEnded = () => {
+    setEnding(true);
+    if (videoRef.current?.srcObject instanceof MediaStream) {
+      videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+    }
+  };
 
   return (
     <>
@@ -55,7 +62,9 @@ export function LiveScreen({
         <SwitchCamera className="w-6 h-6" />
       </button>
 
-      <CounterAnimation ref={counterRef} onEnded={onEnded} />
+      <CounterAnimation ref={counterRef} onEnded={handleCounterEnded} />
+
+      {ending && <ResultAnimation />}
     </>
   );
 }
