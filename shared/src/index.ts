@@ -7,8 +7,8 @@ export const SOCKET_EVENTS = {
 export type ClientRole = "controller" | "pwa";
 
 export type SenderCommand =
-  | { action: "start-countdown" }
-  | { action: "start-live"; atSeconds: number }
+  | { action: "start-countdown"; skipBlack?: boolean }
+  | { action: "start-live"; atSeconds: number; skipBlack?: boolean }
   | { action: "go-home" };
 
 export type CommandPayload = {

@@ -28,6 +28,7 @@ function App() {
   );
   const [sentLog, setSentLog] = useState<LogEntry[]>([]);
   const [liveAt, setLiveAt] = useState(0);
+  const [skipBlack, setSkipBlack] = useState(false);
 
   const connected = status === "connected";
 
@@ -99,9 +100,19 @@ function App() {
           Sender control
         </h2>
 
+        <label className="flex items-center justify-between rounded-xl bg-zinc-900 px-4 py-3 cursor-pointer">
+          <span className="text-sm">Skip black screen</span>
+          <input
+            type="checkbox"
+            checked={skipBlack}
+            onChange={(e) => setSkipBlack(e.target.checked)}
+            className="w-5 h-5 accent-indigo-500"
+          />
+        </label>
+
         <button
           type="button"
-          onClick={() => sendCommand({ action: "start-countdown" })}
+          onClick={() => sendCommand({ action: "start-countdown", skipBlack })}
           disabled={!connected}
           className={btn}
         >
@@ -126,7 +137,7 @@ function App() {
           <button
             type="button"
             onClick={() =>
-              sendCommand({ action: "start-live", atSeconds: liveAt })
+              sendCommand({ action: "start-live", atSeconds: liveAt, skipBlack })
             }
             disabled={!connected}
             className={btn}

@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
+import { BlackScreen } from "./sender/BlackScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
 import { LiveScreen } from "./sender/LiveScreen";
 import { ResultScreen } from "./sender/ResultScreen";
 import { STREAM_DURATION_SECONDS } from "./sender/constants";
 
-type Phase = "countdown" | "live" | "result";
+type Phase = "black" | "countdown" | "live" | "result";
 
 export function SenderMode() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [phase, setPhase] = useState<Phase>("countdown");
+  const [phase, setPhase] = useState<Phase>("black");
+  const [pendingPhase, setPendingPhase] = useState<"countdown" | "live">("countdown");
   const [initialLiveSeconds, setInitialLiveSeconds] = useState(0);
 
   // Preload overlay videos so they start instantly
@@ -32,9 +34,11 @@ export function SenderMode() {
   useEffect(() => {
     const p = searchParams.get("phase");
     if (!p) return;
+    const skip = searchParams.get("skipBlack") === "1";
     if (p === "countdown") {
       setInitialLiveSeconds(0);
-      setPhase("countdown");
+      setPendingPhase("countdown");
+      setPhase(skip ? "countdown" : "black");
     } else if (p === "live") {
       const at = Math.max(
         0,
@@ -44,13 +48,17 @@ export function SenderMode() {
         ),
       );
       setInitialLiveSeconds(at);
-      setPhase("live");
+      setPendingPhase("live");
+      setPhase(skip ? "live" : "black");
     }
     setSearchParams({}, { replace: true });
   }, [searchParams, setSearchParams]);
 
   return (
     <div className="relative h-full bg-zinc-900">
+      {phase === "black" && (
+        <BlackScreen onComplete={() => setPhase(pendingPhase)} />
+      )}
       {phase === "countdown" && (
         <CountdownScreen onComplete={() => setPhase("live")} />
       )}
