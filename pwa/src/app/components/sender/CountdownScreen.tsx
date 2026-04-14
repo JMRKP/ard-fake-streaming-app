@@ -24,7 +24,7 @@ export function CountdownScreen({ onComplete }: CountdownScreenProps) {
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-black">
       <video
-        className={`h-full w-full object-contain transition-opacity duration-200 ${
+        className={`h-full w-full scale-[0.8] object-contain transition-opacity duration-200 ${
           isPlaying ? "opacity-100" : "opacity-0"
         }`}
         src={counterSrc}
