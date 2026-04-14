@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
-import { StartScreen } from "./sender/StartScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
 import { LiveScreen } from "./sender/LiveScreen";
 import { ResultScreen } from "./sender/ResultScreen";
 import { STREAM_DURATION_SECONDS } from "./sender/constants";
 
-type Phase = "start" | "countdown" | "live" | "result";
+type Phase = "countdown" | "live" | "result";
 
 export function SenderMode() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [phase, setPhase] = useState<Phase>("start");
+  const [phase, setPhase] = useState<Phase>("countdown");
   const [initialLiveSeconds, setInitialLiveSeconds] = useState(0);
 
   // Preload overlay videos so they start instantly
@@ -50,11 +49,8 @@ export function SenderMode() {
     setSearchParams({}, { replace: true });
   }, [searchParams, setSearchParams]);
 
-  const handleStart = () => setPhase("countdown");
-
   return (
     <div className="relative h-full bg-zinc-900">
-      {phase === "start" && <StartScreen onStart={handleStart} />}
       {phase === "countdown" && (
         <CountdownScreen onComplete={() => setPhase("live")} />
       )}
