@@ -1,14 +1,16 @@
 import { useEffect, useRef } from "react";
+import type { CameraFacing } from "shared";
 import { CameraFeed, CameraFeedHandle } from "./CameraFeed";
 import { CounterAnimation, CounterAnimationHandle } from "./CounterAnimation";
 import { ViewCountGraph, ViewCountGraphHandle } from "./ViewCountGraph";
 
 interface LiveScreenProps {
   initialSeconds: number;
+  cameraFacing: CameraFacing;
   onEnded: () => void;
 }
 
-export function LiveScreen({ initialSeconds, onEnded }: LiveScreenProps) {
+export function LiveScreen({ initialSeconds, cameraFacing, onEnded }: LiveScreenProps) {
   const cameraRef = useRef<CameraFeedHandle>(null);
   const counterRef = useRef<CounterAnimationHandle>(null);
   const graphRef = useRef<ViewCountGraphHandle>(null);
@@ -32,7 +34,7 @@ export function LiveScreen({ initialSeconds, onEnded }: LiveScreenProps) {
 
   return (
     <>
-      <CameraFeed ref={cameraRef} />
+      <CameraFeed ref={cameraRef} initialFacing={cameraFacing} />
       <ViewCountGraph ref={graphRef} />
       <CounterAnimation ref={counterRef} onEnded={handleCounterEnded} />
     </>

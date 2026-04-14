@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
+import type { CameraFacing } from "shared";
 import { BlackScreen } from "./sender/BlackScreen";
 import { CountdownScreen } from "./sender/CountdownScreen";
 import { LiveScreen } from "./sender/LiveScreen";
@@ -13,6 +14,7 @@ export function SenderMode() {
   const [phase, setPhase] = useState<Phase>("black");
   const [pendingPhase, setPendingPhase] = useState<"countdown" | "live">("countdown");
   const [initialLiveSeconds, setInitialLiveSeconds] = useState(0);
+  const [cameraFacing, setCameraFacing] = useState<CameraFacing>("user");
 
   // Preload overlay videos so they start instantly
   useEffect(() => {
@@ -35,6 +37,10 @@ export function SenderMode() {
     const p = searchParams.get("phase");
     if (!p) return;
     const skip = searchParams.get("skipBlack") === "1";
+    const cam = searchParams.get("camera");
+    if (cam === "user" || cam === "environment") {
+      setCameraFacing(cam);
+    }
     if (p === "countdown") {
       setInitialLiveSeconds(0);
       setPendingPhase("countdown");
@@ -65,6 +71,7 @@ export function SenderMode() {
       {phase === "live" && (
         <LiveScreen
           initialSeconds={initialLiveSeconds}
+          cameraFacing={cameraFacing}
           onEnded={() => setPhase("result")}
         />
       )}
