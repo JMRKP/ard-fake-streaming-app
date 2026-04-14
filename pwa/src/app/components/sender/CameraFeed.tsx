@@ -12,6 +12,7 @@ export const CameraFeed = forwardRef<CameraFeedHandle>(function CameraFeed(
 ) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const hasStarted = useRef(false);
   const [cameraFacing, setCameraFacing] = useState<"user" | "environment">(
     "user",
   );
@@ -80,7 +81,7 @@ export const CameraFeed = forwardRef<CameraFeedHandle>(function CameraFeed(
         playsInline
         muted
         aria-label="User camera feed"
-        onPlaying={() => setIsPlaying(true)}
+        onPlaying={() => { hasStarted.current = true; setIsPlaying(true); }}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${
           isPlaying ? "opacity-100" : "opacity-0"
         }`}
@@ -88,7 +89,9 @@ export const CameraFeed = forwardRef<CameraFeedHandle>(function CameraFeed(
 
       <button
         onClick={switchCamera}
-        className="absolute top-36 right-4 z-40 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors"
+        className={`absolute top-36 right-4 z-40 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors transition-opacity duration-200 ${
+          !hasStarted.current ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
         title="Kamera wechseln"
       >
         <SwitchCamera className="w-6 h-6" />
