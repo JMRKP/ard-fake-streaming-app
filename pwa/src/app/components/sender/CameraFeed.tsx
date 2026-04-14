@@ -67,6 +67,7 @@ export const CameraFeed = forwardRef<CameraFeedHandle>(function CameraFeed(
   }));
 
   const switchCamera = () => {
+    setIsPlaying(false)
     stopCamera();
     setCameraFacing((prev) => (prev === "user" ? "environment" : "user"));
   };
@@ -87,7 +88,7 @@ export const CameraFeed = forwardRef<CameraFeedHandle>(function CameraFeed(
 
       <button
         onClick={switchCamera}
-        className="absolute top-36 right-4 z-20 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors"
+        className="absolute top-36 right-4 z-40 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors"
         title="Kamera wechseln"
       >
         <SwitchCamera className="w-6 h-6" />
