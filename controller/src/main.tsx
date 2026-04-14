@@ -2,6 +2,7 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   SOCKET_EVENTS,
+  type CameraFacing,
   type CommandPayload,
   type SenderCommand,
 } from "shared";
@@ -29,6 +30,7 @@ function App() {
   const [sentLog, setSentLog] = useState<LogEntry[]>([]);
   const [liveAt, setLiveAt] = useState(0);
   const [skipBlack, setSkipBlack] = useState(false);
+  const [cameraFacing, setCameraFacing] = useState<CameraFacing>("user");
 
   const connected = status === "connected";
 
@@ -110,9 +112,19 @@ function App() {
           />
         </label>
 
+        <label className="flex items-center justify-between rounded-xl bg-zinc-900 px-4 py-3 cursor-pointer">
+          <span className="text-sm">Rear camera</span>
+          <input
+            type="checkbox"
+            checked={cameraFacing === "environment"}
+            onChange={(e) => setCameraFacing(e.target.checked ? "environment" : "user")}
+            className="w-5 h-5 accent-indigo-500"
+          />
+        </label>
+
         <button
           type="button"
-          onClick={() => sendCommand({ action: "start-countdown", skipBlack })}
+          onClick={() => sendCommand({ action: "start-countdown", skipBlack, cameraFacing })}
           disabled={!connected}
           className={btn}
         >
@@ -137,7 +149,7 @@ function App() {
           <button
             type="button"
             onClick={() =>
-              sendCommand({ action: "start-live", atSeconds: liveAt, skipBlack })
+              sendCommand({ action: "start-live", atSeconds: liveAt, skipBlack, cameraFacing })
             }
             disabled={!connected}
             className={btn}
