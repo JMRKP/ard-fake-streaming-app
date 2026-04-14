@@ -8,12 +8,13 @@ export interface CounterAnimationHandle {
 
 interface CounterAnimationProps {
   onEnded: () => void;
+  durationSeconds?: number;
 }
 
 export const CounterAnimation = forwardRef<
   CounterAnimationHandle,
   CounterAnimationProps
->(function CounterAnimation({ onEnded }, ref) {
+>(function CounterAnimation({ onEnded, durationSeconds = STREAM_DURATION_SECONDS }, ref) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -50,7 +51,7 @@ export const CounterAnimation = forwardRef<
   const handleTimeUpdate = () => {
     const video = videoRef.current;
     if (!video || hasFiredOnEnded.current) return;
-    if (video.currentTime >= STREAM_DURATION_SECONDS) {
+    if (video.currentTime >= durationSeconds) {
       hasFiredOnEnded.current = true;
       onEnded();
     }

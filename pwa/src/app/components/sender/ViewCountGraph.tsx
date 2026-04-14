@@ -5,8 +5,12 @@ export interface ViewCountGraphHandle {
   readonly ready: Promise<void>;
 }
 
-export const ViewCountGraph = forwardRef<ViewCountGraphHandle>(
-  function ViewCountGraph(_props, ref) {
+interface ViewCountGraphProps {
+  src: string;
+}
+
+export const ViewCountGraph = forwardRef<ViewCountGraphHandle, ViewCountGraphProps>(
+  function ViewCountGraph({ src }, ref) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -42,7 +46,7 @@ export const ViewCountGraph = forwardRef<ViewCountGraphHandle>(
       <div className="absolute top-4 left-4 right-4 z-20">
         <video
           ref={videoRef}
-          src={`${import.meta.env.BASE_URL}animated/Barometer_G1_v05.webm`}
+          src={src}
           muted
           playsInline
           preload="auto"

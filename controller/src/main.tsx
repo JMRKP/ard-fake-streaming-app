@@ -2,8 +2,10 @@ import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   SOCKET_EVENTS,
+  LIVE_VARIANTS,
   type CommandPayload,
   type SenderCommand,
+  type LiveVariant,
 } from "shared";
 import { socket, resetWsToken } from "./lib/socket";
 import "./index.css";
@@ -29,6 +31,7 @@ function App() {
   const [sentLog, setSentLog] = useState<LogEntry[]>([]);
   const [liveAt, setLiveAt] = useState(0);
   const [skipBlack, setSkipBlack] = useState(false);
+  const [variant, setVariant] = useState<LiveVariant>(1);
 
   const connected = status === "connected";
 
@@ -110,9 +113,25 @@ function App() {
           />
         </label>
 
+        <div className="rounded-xl bg-zinc-900 px-4 py-3">
+          <label htmlFor="variant" className="block text-sm mb-2">Variant</label>
+          <select
+            id="variant"
+            value={variant}
+            onChange={(e) => setVariant(Number(e.target.value) as LiveVariant)}
+            className="w-full rounded-lg bg-zinc-800 text-zinc-100 px-3 py-2 text-sm"
+          >
+            {LIVE_VARIANTS.map((v) => (
+              <option key={v.id} value={v.id}>
+                {v.label} — {v.resultFile.replace(/_v\d+\.webm$/, "").replace(/-/g, " ")}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <button
           type="button"
-          onClick={() => sendCommand({ action: "start-countdown", skipBlack })}
+          onClick={() => sendCommand({ action: "start-countdown", skipBlack, variant })}
           disabled={!connected}
           className={btn}
         >
@@ -137,7 +156,7 @@ function App() {
           <button
             type="button"
             onClick={() =>
-              sendCommand({ action: "start-live", atSeconds: liveAt, skipBlack })
+              sendCommand({ action: "start-live", atSeconds: liveAt, skipBlack, variant })
             }
             disabled={!connected}
             className={btn}
