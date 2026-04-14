@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { LIVE_VARIANTS, type LiveVariant } from "shared";
+import { HiddenHomeButton } from "../HiddenHomeButton";
 import { CameraFeed, CameraFeedHandle } from "./CameraFeed";
 import { CounterAnimation, CounterAnimationHandle } from "./CounterAnimation";
 import { ViewCountGraph, ViewCountGraphHandle } from "./ViewCountGraph";
@@ -37,6 +38,7 @@ export function LiveScreen({ initialSeconds, variant, onEnded }: LiveScreenProps
 
   return (
     <>
+      <HiddenHomeButton />
       <CameraFeed ref={cameraRef} />
       <ViewCountGraph ref={graphRef} src={graphSrc} />
       <CounterAnimation ref={counterRef} onEnded={handleCounterEnded} durationSeconds={config.durationSeconds} />

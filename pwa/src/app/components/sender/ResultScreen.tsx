@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { HiddenHomeButton } from "../HiddenHomeButton";
 
 interface ResultScreenProps {
   src: string;
@@ -9,6 +10,7 @@ export function ResultScreen({ src }: ResultScreenProps) {
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-black">
+      <HiddenHomeButton />
       <video
         className={`h-full w-full object-contain${ready ? "" : " invisible"}`}
         src={src}

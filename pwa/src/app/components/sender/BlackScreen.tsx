@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { HiddenHomeButton } from "../HiddenHomeButton";
 
 const BLACK_SCREEN_DURATION_MS = 10_000;
 
@@ -12,5 +13,9 @@ export function BlackScreen({ onComplete }: BlackScreenProps) {
     return () => clearTimeout(timer);
   }, [onComplete]);
 
-  return <div className="absolute inset-0 bg-black" />;
+  return (
+    <div className="absolute inset-0 bg-black">
+      <HiddenHomeButton />
+    </div>
+  );
 }

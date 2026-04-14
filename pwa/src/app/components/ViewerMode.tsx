@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { HiddenHomeButton } from "./HiddenHomeButton";
 
 export function ViewerMode() {
   const [ready, setReady] = useState(false);
@@ -6,6 +7,7 @@ export function ViewerMode() {
 
   return (
     <div className="relative h-full bg-black overflow-hidden">
+      <HiddenHomeButton />
       <video
         className={`absolute inset-0 h-full w-full object-cover${ready ? "" : " invisible"}`}
         src={src}
