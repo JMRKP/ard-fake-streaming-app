@@ -1,5 +1,4 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
-import type { CameraFacing } from "shared";
 import { SwitchCamera } from "lucide-react";
 
 export interface CameraFeedHandle {
@@ -7,18 +6,14 @@ export interface CameraFeedHandle {
   readonly ready: Promise<void>;
 }
 
-interface CameraFeedProps {
-  initialFacing?: CameraFacing;
-}
-
-export const CameraFeed = forwardRef<CameraFeedHandle, CameraFeedProps>(function CameraFeed(
-  { initialFacing = "user" },
+export const CameraFeed = forwardRef<CameraFeedHandle>(function CameraFeed(
+  _props,
   ref,
 ) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [cameraFacing, setCameraFacing] = useState<CameraFacing>(
-    initialFacing,
+  const [cameraFacing, setCameraFacing] = useState<"user" | "environment">(
+    "user",
   );
 
   const readyPromise = useRef<Promise<void>>();

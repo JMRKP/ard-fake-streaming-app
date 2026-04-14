@@ -10,18 +10,15 @@ export function useRemoteRouter() {
     const { command } = lastCommand;
     const skipParam = command.action !== "go-home" && command.skipBlack ? "&skipBlack=1" : "";
     switch (command.action) {
-      case "start-countdown": {
-        const camParam = command.cameraFacing ? `&camera=${command.cameraFacing}` : "";
-        router.navigate(`/sender?phase=countdown${skipParam}${camParam}`);
+      case "start-countdown":
+        router.navigate(`/sender?phase=countdown${skipParam}`);
         break;
-      }
       case "start-live": {
         const at = Math.max(
           0,
           Math.min(180, Math.floor(command.atSeconds)),
         );
-        const camParam = command.cameraFacing ? `&camera=${command.cameraFacing}` : "";
-        router.navigate(`/sender?phase=live&at=${at}${skipParam}${camParam}`);
+        router.navigate(`/sender?phase=live&at=${at}${skipParam}`);
         break;
       }
       case "go-home":

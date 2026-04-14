@@ -6,11 +6,9 @@ export const SOCKET_EVENTS = {
 
 export type ClientRole = "controller" | "pwa";
 
-export type CameraFacing = "user" | "environment";
-
 export type SenderCommand =
-  | { action: "start-countdown"; skipBlack?: boolean; cameraFacing?: CameraFacing }
-  | { action: "start-live"; atSeconds: number; skipBlack?: boolean; cameraFacing?: CameraFacing }
+  | { action: "start-countdown"; skipBlack?: boolean }
+  | { action: "start-live"; atSeconds: number; skipBlack?: boolean }
   | { action: "go-home" };
 
 export type CommandPayload = {
