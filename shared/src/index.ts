@@ -18,8 +18,8 @@ export interface LiveVariantConfig {
 
 export const LIVE_VARIANTS: LiveVariantConfig[] = [
   { id: 1, label: "G1", graphFile: "Barometer_G1_v09.webm", resultFile: "WON_30_v06.webm", durationSeconds: 180 },
-  { id: 2, label: "G2", graphFile: "Barometer_G2_v09.webm", resultFile: "LOST-OUT_A_v06.webm", durationSeconds: 170 },
-  { id: 3, label: "G3", graphFile: "Barometer_G3_v09.webm", resultFile: "LOST-OUT_A_v06.webm", durationSeconds: 170 },
+  { id: 2, label: "G2", graphFile: "Barometer_G3-SHORT_v11.webm", resultFile: "LOST-OUT_A_v06.webm", durationSeconds: 20 },
+  { id: 3, label: "G3", graphFile: "Barometer_G3-SHORT_v11.webm", resultFile: "LOST-OUT_A_v06.webm", durationSeconds: 30 },
   { id: 4, label: "G4a", graphFile: "Barometer_G4_v09.webm", resultFile: "WON_300_v06.webm", durationSeconds: 180 },
   { id: 5, label: "G4b", graphFile: "Barometer_G4_v09.webm", resultFile: "WON_30000_v06.webm", durationSeconds: 180 },
   { id: 6, label: "G5", graphFile: "Barometer_G5_v09.webm", resultFile: "WON_3000_v06.webm", durationSeconds: 180 },
