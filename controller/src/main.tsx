@@ -32,6 +32,12 @@ function App() {
   const [liveAt, setLiveAt] = useState(0);
   const [skipBlack, setSkipBlack] = useState(false);
   const [variant, setVariant] = useState<LiveVariant>(1);
+  const variantConfig = LIVE_VARIANTS.find((v) => v.id === variant)!;
+
+  const handleVariantChange = (v: LiveVariant) => {
+    setVariant(v);
+    setLiveAt((prev) => Math.min(prev, LIVE_VARIANTS.find((x) => x.id === v)!.durationSeconds));
+  };
 
   const connected = status === "connected";
 
@@ -118,7 +124,7 @@ function App() {
           <select
             id="variant"
             value={variant}
-            onChange={(e) => setVariant(Number(e.target.value) as LiveVariant)}
+            onChange={(e) => handleVariantChange(Number(e.target.value) as LiveVariant)}
             className="w-full rounded-lg bg-zinc-800 text-zinc-100 px-3 py-2 text-sm"
           >
             {LIVE_VARIANTS.map((v) => (
@@ -147,7 +153,7 @@ function App() {
             id="live-at"
             type="range"
             min={0}
-            max={180}
+            max={variantConfig.durationSeconds}
             step={1}
             value={liveAt}
             onChange={(e) => setLiveAt(Number(e.target.value))}
