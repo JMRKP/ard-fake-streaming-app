@@ -82,9 +82,9 @@ export const CameraFeed = forwardRef<CameraFeedHandle>(function CameraFeed(
         muted
         aria-label="User camera feed"
         onPlaying={() => { hasStarted.current = true; setIsPlaying(true); }}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity transition-transform duration-200 ${
           isPlaying ? "opacity-100" : "opacity-0"
-        }`}
+        } ${cameraFacing === "user" ? "-scale-x-100" : ""}`}
       />
 
       <button
